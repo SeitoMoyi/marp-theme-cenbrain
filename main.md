@@ -9,7 +9,9 @@ title: Protocol-aware Acquisition Infrastructure for the rteeg Speech Client
 # Protocol-aware Acquisition Infrastructure for the rteeg Speech Client
 
 **Short-term progress report**\
+
 Peibin / rteeg speech project\
+
 July 2026
 
 ***
@@ -60,14 +62,7 @@ Neural speech decoding systems depend on more than model inference.
 
 ***
 
-<!-- _class: two-cols -->
-
 # Client Role in the Pipeline
-
-<div class="columns">
-<div class="col-left">
-
-The speech client is the participant-facing and operator-facing layer.
 
 | Responsibility            | Purpose                                            |
 | ------------------------- | -------------------------------------------------- |
@@ -77,47 +72,22 @@ The speech client is the participant-facing and operator-facing layer.
 | Receive decoding messages | expose online feedback                             |
 | Capture audio/screenshots | provide auxiliary audit streams                    |
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder">
-<div class="figure-title">Acquisition Flow</div>
-<div class="mini-flow">
-<span>Task YAML</span><span class="arrow">→</span><span>Preview UI</span><span class="arrow">→</span><span>Marker Queue</span><span class="arrow">→</span><span>Server Recording</span><span class="arrow">→</span><span>Decoder Feedback</span>
-</div>
-<!-- <div class="figure-subtitle">Suggested file: <code>figures/acquisition-flow.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/acquisition-flow.svg" width="80%">
+</center>
 
 ***
 
-<!-- _class: two-cols -->
-
 # Execution Layers
-
-<div class="columns">
-<div class="col-left">
 
 | Layer                 | Main responsibility                                                                       | Research relevance                                   |
 | --------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | Vue renderer          | task state, stimulus presentation, preview overlays, decoding display                     | participant interaction and visible feedback         |
 | Electron main process | session discovery, ZeroMQ communication, audio streaming, screenshot capture, IPC routing | communication with recording and processing pipeline |
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder blue">
-<div class="figure-title">Renderer / Main Process</div>
-<div class="mini-flow">
-<span>Vue Renderer</span><span class="arrow">⇄</span><span>IPC Bridge</span><span class="arrow">⇄</span><span>Electron Main</span><span class="arrow">⇄</span><span>ZeroMQ</span>
-</div>
-<!-- <div class="figure-subtitle">Suggested file: <code>figures/client-layer-separation.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/client-layer-separation.svg" width=75%">
+</center>
 
 ***
 
@@ -222,44 +192,23 @@ Main-process topic routing distinguishes partial, word-level, sentence-word, and
 
 ***
 
-<!-- _class: two-cols -->
-
 # Progress 4: Marker Reliability
-
-<div class="columns">
-<div class="col-left">
 
 The control client serializes marker sending through a promise queue.
 
 The main process also queues markers generated before the control client is ready and flushes them after initialization.
 
 **Problem addressed:** rapid or premature marker calls can conflict with ZeroMQ request/reply ordering.
-
 **Allowed claim:** the client reduces control-message ordering risk.\
 **Not yet claimed:** millisecond synchronization precision.
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder blue">
-<div class="figure-title">Marker Queue Sequence</div>
-<div class="mini-flow">
-<span>UI marker</span><span class="arrow">→</span><span>Pending buffer</span><span class="arrow">→</span><span>Promise queue</span><span class="arrow">→</span><span>ZMQ control</span><span class="arrow">→</span><span>Server log</span>
-</div>
-<!-- <div class="figure-subtitle">Suggested file: <code>figures/marker-queue-sequence.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/marker-queue-sequence.svg" width="80%">
+</center>
 
 ***
 
-<!-- _class: two-cols -->
-
 # Progress 5: Auxiliary Capture Streams
-
-<div class="columns">
-<div class="col-left">
 
 The client can collect auxiliary behavioral evidence:
 
@@ -268,19 +217,9 @@ The client can collect auxiliary behavioral evidence:
 | Audio       | mono microphone packets to server-side audio channel | acoustic latency and packet timing       |
 | Screenshots | timestamped frames with callback information         | frame timing against server-side records |
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder">
-<div class="figure-title">Multi-stream Alignment</div>
-<div class="mock-panel">Neural data track</div>
-<div class="mock-panel">Marker track · audio packets · screenshot frames</div>
-<div class="mock-panel">Online decoding messages</div>
-<!-- <div class="figure-subtitle">Suggested file: <code>figures/multistream-alignment-placeholder.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/multistream-alignment-placeholder.svg" width="90%">
+</center>
 
 ***
 
@@ -308,7 +247,7 @@ A later decoder can only be interpreted if the acquisition record shows:
 
 This work contributes **infrastructure readiness** before decoder-performance evaluation.
 
-***
+<!-- ***
 
 # Claim Boundary
 
@@ -317,7 +256,7 @@ This work contributes **infrastructure readiness** before decoder-performance ev
 | The client implements protocol-aware task and marker infrastructure. | The client improves neural decoding accuracy.                |
 | The online display separates live and final sentence outputs.        | The system is a complete clinical speech neuroprosthesis.    |
 | Queued marker sending reduces ordering risk in the control path.     | Marker timing has been validated to millisecond precision.   |
-| Audio and screenshot streams can support later audit.                | Auxiliary streams are already synchronized with neural data. |
+| Audio and screenshot streams can support later audit.                | Auxiliary streams are already synchronized with neural data. | -->
 
 ***
 
@@ -341,12 +280,7 @@ Therefore, claims should remain implementation-centered.
 
 ***
 
-<!-- _class: two-cols -->
-
 # Validation Plan
-
-<div class="columns">
-<div class="col-left">
 
 Near-term validation should convert mechanisms into measured evidence.
 
@@ -357,19 +291,9 @@ Near-term validation should convert mechanisms into measured evidence.
 5. Integration tests with server-side recording
 6. Failure-mode documentation
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder blue">
-<div class="figure-title">Validation Roadmap</div>
-<div class="mini-flow">
-<span>Implementation evidence</span><span class="arrow">→</span><span>Session rehearsal</span><span class="arrow">→</span><span>Timing benchmark</span><span class="arrow">→</span><span>Server integration</span><span class="arrow">→</span><span>Acquisition-quality evidence</span>
-</div>
-<div class="figure-subtitle">Suggested file: <code>figures/validation-roadmap.svg</code></div>
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/validation-roadmap.svg" width="95%">
+</center>
 
 ***
 

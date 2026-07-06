@@ -9,7 +9,9 @@ title: 面向 rteeg 语音客户端的协议感知采集基础设施
 # 面向 rteeg 语音客户端的协议感知采集基础设施
 
 **短期进展报告**\
+
 Peibin / rteeg 语音项目\
+
 2026年7月
 
 ***
@@ -60,14 +62,7 @@ Peibin / rteeg 语音项目\
 
 ***
 
-<!-- _class: two-cols -->
-
 # 客户端在数据链路中的定位
-
-<div class="columns">
-<div class="col-left">
-
-语音客户端是面向受试者与实验操作人员的交互层。
 
 | 职责                  | 作用                                |
 | --------------------- | ----------------------------------- |
@@ -77,47 +72,22 @@ Peibin / rteeg 语音项目\
 | 接收解码消息          | 展示在线反馈结果                    |
 | 采集音频/截图         | 提供辅助审计数据流                  |
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder">
-<div class="figure-title">采集流程</div>
-<div class="mini-flow">
-<span>任务 YAML</span><span class="arrow">→</span><span>预览界面</span><span class="arrow">→</span><span>Marker 队列</span><span class="arrow">→</span><span>服务端录制</span><span class="arrow">→</span><span>解码器反馈</span>
-</div>
-<!-- <div class="figure-subtitle">建议文件：<code>figures/acquisition-flow.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/acquisition-flow.svg" width="80%">
+</center>
 
 ***
 
-<!-- _class: two-cols -->
-
 # 执行层级
-
-<div class="columns">
-<div class="col-left">
 
 | 层级                 | 核心职责                                                                 | 研究价值                                   |
 | -------------------- | ------------------------------------------------------------------------ | ------------------------------------------ |
 | Vue 渲染层           | 任务状态管理、刺激呈现、预览叠加层、解码结果展示                        | 受试者交互与可视化反馈                     |
 | Electron 主进程      | session 发现、ZeroMQ 通信、音频流传输、截图采集、IPC 路由               | 与录制及处理链路的通信交互                 |
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder blue">
-<div class="figure-title">渲染层 / 主进程</div>
-<div class="mini-flow">
-<span>Vue 渲染层</span><span class="arrow">⇄</span><span>IPC 桥接层</span><span class="arrow">⇄</span><span>Electron 主进程</span><span class="arrow">⇄</span><span>ZeroMQ</span>
-</div>
-<!-- <div class="figure-subtitle">建议文件：<code>figures/client-layer-separation.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/client-layer-separation.svg" width=75%">
+</center>
 
 ***
 
@@ -221,44 +191,23 @@ Peibin / rteeg 语音项目\
 
 ***
 
-<!-- _class: two-cols -->
-
 # 进展 4：Marker 可靠性
-
-<div class="columns">
-<div class="col-left">
 
 控制端通过 promise 队列实现 marker 发送的串行化。
 
 主进程同样会对控制端就绪前生成的 marker 做入队处理，并在初始化完成后统一批量发送。
 
 **解决的问题：** 高频或过早的 marker 调用可能与 ZeroMQ 的请求-应答顺序产生冲突。
-
 **可支持的结论：** 该客户端降低了控制消息的时序错乱风险。\
 **暂不支持的结论：** 毫秒级同步精度。
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder blue">
-<div class="figure-title">Marker 队列时序</div>
-<div class="mini-flow">
-<span>UI 层 marker</span><span class="arrow">→</span><span>待处理缓冲区</span><span class="arrow">→</span><span>Promise 队列</span><span class="arrow">→</span><span>ZMQ 控制通道</span><span class="arrow">→</span><span>服务端日志</span>
-</div>
-<!-- <div class="figure-subtitle">建议文件：<code>figures/marker-queue-sequence.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/marker-queue-sequence.svg" width="80%">
+</center>
 
 ***
 
-<!-- _class: two-cols -->
-
 # 进展 5：辅助采集数据流
-
-<div class="columns">
-<div class="col-left">
 
 客户端可采集多类辅助行为佐证数据：
 
@@ -267,19 +216,9 @@ Peibin / rteeg 语音项目\
 | 音频   | 单声道麦克风数据包上传至服务端音频通道 | 声学延迟与数据包时序             |
 | 截图   | 带时间戳与回调信息的画面帧             | 画面帧时序与服务端记录的对齐校验 |
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder">
-<div class="figure-title">多流对齐</div>
-<div class="mock-panel">神经数据轨</div>
-<div class="mock-panel">Marker 轨 · 音频数据包 · 截图帧</div>
-<div class="mock-panel">在线解码消息</div>
-<!-- <div class="figure-subtitle">建议文件：<code>figures/multistream-alignment-placeholder.svg</code></div> -->
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/multistream-alignment-placeholder.svg" width="90%">
+</center>
 
 ***
 
@@ -340,8 +279,6 @@ Peibin / rteeg 语音项目\
 
 ***
 
-<!-- _class: two-cols -->
-
 # 验证计划
 
 <div class="columns">
@@ -356,19 +293,9 @@ Peibin / rteeg 语音项目\
 5. 与服务端录制模块的集成测试
 6. 故障场景文档整理
 
-</div>
-<div class="col-right">
-
-<div class="figure-placeholder blue">
-<div class="figure-title">验证路线图</div>
-<div class="mini-flow">
-<span>实现层面证据</span><span class="arrow">→</span><span>实验流程演练</span><span class="arrow">→</span><span>时序基准测试</span><span class="arrow">→</span><span>服务端集成</span><span class="arrow">→</span><span>采集质量实证</span>
-</div>
-<div class="figure-subtitle">建议文件：<code>figures/validation-roadmap.svg</code></div>
-</div>
-
-</div>
-</div>
+<center>
+<img src="figures/validation-roadmap.svg" width="95%">
+</center>
 
 ***
 

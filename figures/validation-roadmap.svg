@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 180" width="960" height="180" font-family="'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 1 L10 5 L0 9 Z" fill="#2C3E50"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="180" fill="#F8FAFC" rx="10"/>
+
+  <!-- Title -->
+  <text x="480" y="22" font-size="11" fill="#718096" font-weight="bold" text-anchor="middle" letter-spacing="2">SHORT-TERM VALIDATION ROADMAP</text>
+
+  <!-- Phase bar background -->
+  <rect x="25" y="42" width="910" height="6" rx="3" fill="#E2E8F0"/>
+
+  <!-- Phase progress indicator (covered portion) -->
+  <rect x="25" y="42" width="100" height="6" rx="3" fill="#2C3E50"/>
+
+  <!-- Step 1: Implementation Evidence -->
+  <rect x="22" y="58" width="155" height="72" rx="8" fill="#2C3E50"/>
+  <text x="100" y="82" font-size="12" fill="#FFFFFF" font-weight="bold" text-anchor="middle">Implementation</text>
+  <text x="100" y="98" font-size="12" fill="#FFFFFF" font-weight="bold" text-anchor="middle">Evidence</text>
+  <line x1="40" y1="106" x2="158" y2="106" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+  <text x="100" y="119" font-size="9" fill="#CBD5E0" text-anchor="middle">Current stage</text>
+  <circle cx="100" cy="42" r="6" fill="#2C3E50" stroke="#F8FAFC" stroke-width="2"/>
+
+  <!-- Arrow 1→2 -->
+  <line x1="185" y1="94" x2="213" y2="94" stroke="#2C3E50" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- Step 2: Session Rehearsal -->
+  <rect x="222" y="52" width="155" height="78" rx="8" fill="#FFFFFF" stroke="#CBD5E0" stroke-width="1.2"/>
+  <text x="300" y="76" font-size="12" fill="#2C3E50" font-weight="bold" text-anchor="middle">Session</text>
+  <text x="300" y="92" font-size="12" fill="#2C3E50" font-weight="bold" text-anchor="middle">Rehearsal</text>
+  <line x1="240" y1="100" x2="358" y2="100" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="300" y="113" font-size="9" fill="#718096" text-anchor="middle">UI dry-run</text>
+  <text x="300" y="124" font-size="9" fill="#718096" text-anchor="middle">Preview + Char mode</text>
+  <circle cx="300" cy="42" r="6" fill="#CBD5E0" stroke="#F8FAFC" stroke-width="2"/>
+
+  <!-- Arrow 2→3 -->
+  <line x1="385" y1="94" x2="413" y2="94" stroke="#A0AEC0" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 3: Timing Benchmark -->
+  <rect x="422" y="52" width="155" height="78" rx="8" fill="#FFFFFF" stroke="#CBD5E0" stroke-width="1.2"/>
+  <text x="500" y="76" font-size="12" fill="#2C3E50" font-weight="bold" text-anchor="middle">Timing</text>
+  <text x="500" y="92" font-size="12" fill="#2C3E50" font-weight="bold" text-anchor="middle">Benchmark</text>
+  <line x1="440" y1="100" x2="558" y2="100" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="500" y="113" font-size="9" fill="#718096" text-anchor="middle">Marker latency</text>
+  <text x="500" y="124" font-size="9" fill="#718096" text-anchor="middle">Audio/screenshot timing</text>
+  <circle cx="500" cy="42" r="6" fill="#CBD5E0" stroke="#F8FAFC" stroke-width="2"/>
+
+  <!-- Arrow 3→4 -->
+  <line x1="585" y1="94" x2="613" y2="94" stroke="#A0AEC0" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 4: Server Integration -->
+  <rect x="622" y="52" width="155" height="78" rx="8" fill="#FFFFFF" stroke="#CBD5E0" stroke-width="1.2"/>
+  <text x="700" y="76" font-size="12" fill="#2C3E50" font-weight="bold" text-anchor="middle">Server</text>
+  <text x="700" y="92" font-size="12" fill="#2C3E50" font-weight="bold" text-anchor="middle">Integration</text>
+  <line x1="640" y1="100" x2="758" y2="100" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="700" y="113" font-size="9" fill="#718096" text-anchor="middle">End-to-end tests</text>
+  <text x="700" y="124" font-size="9" fill="#718096" text-anchor="middle">Failure-mode docs</text>
+  <circle cx="700" cy="42" r="6" fill="#CBD5E0" stroke="#F8FAFC" stroke-width="2"/>
+
+  <!-- Arrow 4→5 -->
+  <line x1="785" y1="94" x2="813" y2="94" stroke="#A0AEC0" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 5: Acquisition-quality Evidence -->
+  <rect x="822" y="52" width="125" height="78" rx="8" fill="#E67E22" stroke="#D35400" stroke-width="1.2"/>
+  <text x="884" y="76" font-size="12" fill="#FFFFFF" font-weight="bold" text-anchor="middle">Acquisition</text>
+  <text x="884" y="92" font-size="12" fill="#FFFFFF" font-weight="bold" text-anchor="middle">Quality</text>
+  <line x1="838" y1="100" x2="930" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+  <text x="884" y="113" font-size="9" fill="#FED7AA" text-anchor="middle">Measured</text>
+  <text x="884" y="124" font-size="9" fill="#FED7AA" text-anchor="middle">evidence</text>
+  <circle cx="884" cy="42" r="6" fill="#E67E22" stroke="#F8FAFC" stroke-width="2"/>
+
+  <!-- Bottom annotation -->
+  <rect x="25" y="148" width="922" height="22" rx="4" fill="none" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="486" y="163" font-size="10" fill="#718096" text-anchor="middle">Goal: convert implementation mechanisms → measured acquisition-quality evidence</text>
+</svg>
