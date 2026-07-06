@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage[strings]{underscore}
+\title{Short-term Progress Report on Protocol-aware Acquisition Infrastructure for the rteeg Speech Client}
+\author{Peibin / rteeg speech project}
+\date{July 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This report summarizes a short-term engineering research contribution to the `rteeg-speech-client` within a neural speech decoding project. Recent speech neuroprosthesis studies show that real-time communication systems depend not only on decoding models but also on controlled stimuli, feedback visibility, and event alignment \cite{Metzger2023Nature,Willett2023Nature,Card2024NEJM}. The work reported here is therefore framed as a protocol-aware acquisition front end rather than as a new neural decoder. The main progress includes schema-based YAML task controls, sentence preview and character-level execution, separated live and final decoding displays, queued marker delivery, and auxiliary audio/screenshot capture. Local source evidence supports these implementation claims, while accuracy, clinical validation, participant outcomes, and formal latency measurements remain outside the evidence boundary. The contribution of this stage is to make future neural speech decoding data collection more controllable, observable, and auditable.
+\end{abstract}
+
+\section{Introduction}
+Neural speech decoding research aims to restore or support communication by mapping neural activity during attempted or imagined speech into usable outputs. Recent high-performance systems demonstrate the importance of real-time feedback and coordinated recording pipelines \cite{Metzger2023Nature,Willett2023Nature}. These achievements motivate careful acquisition infrastructure: stimuli must be repeatable, events must be labeled, online outputs must be visible, and auxiliary behavioral traces should be aligned with neural data.
+
+This report does not claim a new decoding algorithm. Instead, it documents short-term progress on the `rteeg-speech-client`, an Electron/Vue/TypeScript experiment client used in the broader rteeg speech project. The confirmed contribution is a protocol-aware acquisition front end that integrates configurable task definition, preview-controlled stimulus presentation, online feedback observability, queued event markers, and auxiliary capture streams. The evidence is local and implementation-centered, so the manuscript uses external speech BCI literature only for field context and uses source files as the basis for project claims.
+
+\section{System Context}
+The rteeg project provides a real-time EEG-oriented data environment in which an experiment client interacts with a server-side recording pipeline. The server documentation defines separate ZeroMQ channels for EEG monitor data and control as well as ExperimentClient control and audio streams. In this architecture, the speech client is the participant-facing and operator-facing layer: it loads tasks, presents prompts, sends markers, receives online decoding messages, and can transmit auxiliary audio or screenshot information.
+
+The client has two relevant execution layers. The renderer layer manages task state, stimulus presentation, preview overlays, and decoding display components. The Electron main process manages local session discovery, ZeroMQ control communication, audio streaming, screenshot capture, and IPC routing. This separation matters because neural speech decoding experiments require both precise participant interaction and reliable communication with downstream data processing.
+
+\section{Development Progress}
+\subsection{YAML-based task configuration}
+The client documentation and `task_schema_v2.1.json` now describe a YAML task format with explicit fields for `preview_time`, `show_preview_text`, and `record_by_character`. The parser in `configUtils.ts` maps these fields into runtime task objects. This provides a repeatable task-definition surface for speech experiments where prompt timing and collection granularity must be controlled.
+
+\subsection{Sentence preview and character-level execution}
+The experiment core implements preview-aware task execution. It can show a sentence preview with a countdown, hide the preview text while preserving timing, and split a phrase into character units for fine-grained collection. During execution it emits session, sentence, and word-level markers. This improves controllability of the experimental protocol, although no latency benchmark is included in the present materials.
+
+\subsection{Online decoding feedback display}
+The client separates live partial decoding from finalized sentence history. Main-process topic routing distinguishes partial, word-level, sentence-word, and final sentence decoding messages, while `DecodingDisplay.vue` maintains a current decoding field and a bounded history of finalized sentence outputs. This change makes online feedback more observable during collection without claiming that the displayed decoding is accurate.
+
+\subsection{Marker reliability and event synchronization}
+The control client serializes marker sending through a promise queue. The main process also queues markers generated before the control client is ready and flushes them after initialization. These changes address a practical risk in ZeroMQ request/reply communication: rapid or premature marker calls can otherwise conflict with socket ordering. The allowed claim is that the client reduces message-ordering risk; formal synchronization precision remains a future validation task.
+
+\subsection{Audio and screenshot auxiliary streams}
+The audio module captures mono microphone audio and pushes packets to the server-side audio channel while logging packet counts and reporting detection failures. The screenshot module captures timestamped frames and can emit per-frame callback information. These channels can support later behavioral audit alongside neural and marker data, but the current report does not measure acoustic latency or frame-timing accuracy.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{p{0.22\linewidth}p{0.33\linewidth}p{0.32\linewidth}}
+\toprule
+Progress area & Local evidence & Research value \\
+\midrule
+Task configuration & README, schema, `configUtils.ts` & Repeatable stimulus and timing definitions \\
+Preview and character mode & `expcore.ts`, `ExperimentView.vue` & Controlled presentation and fine-grained labels \\
+Online feedback & `index.ts`, `DecodingDisplay.vue` & Observable live and final decoding streams \\
+Marker queue & `netutils.ts`, `index.ts` & Reduced control-message ordering risk \\
+Auxiliary streams & `audio.ts`, `screenshot.ts` & Behavioral evidence for later audit \\
+\bottomrule
+\end{tabular}
+\caption{Main client-side progress areas and their bounded research relevance.}
+\end{table}
+
+\section{Research Relevance}
+The engineering changes matter because neural speech decoding experiments are sensitive to data provenance. A later decoder can only be interpreted if the experimenter can reconstruct which stimulus was shown, when a word or character unit began, what online output was visible, and which auxiliary behavioral streams were recorded. Prior speech neuroprosthesis work demonstrates mature end-to-end communication outputs \cite{Moses2021NEJM,Makin2020NatNeurosci}, but the present local contribution is earlier in the pipeline: it prepares the acquisition front end for controlled collection.
+
+Three values follow from the client updates. First, controllability improves because task timing and preview behavior are explicit in configuration. Second, observability improves because live and finalized decoding messages are displayed separately. Third, auditability improves because markers, audio packets, and screenshots can be related to experiment sessions and task units. These are infrastructure values, not performance metrics.
+
+\section{Current Limitations and Validation Needs}
+The supplied materials do not include neural decoding accuracy, patient or participant outcomes, formal latency measurements, or clinical validation. Therefore, the report cannot claim that the client improves decoder performance or guarantees millisecond synchronization. It can only claim that the relevant mechanisms are implemented and that they are appropriate targets for validation.
+
+Future work should measure marker latency and ordering under realistic load, verify audio and screenshot timing against server-side frames, rehearse the UI in complete task sessions, and document failure modes. It should also clarify the relationship between Excel-based and YAML-based task paths and complete the remaining global configuration integration noted in the code.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{p{0.45\linewidth}p{0.45\linewidth}}
+\toprule
+Allowed claim & Claim to avoid \\
+\midrule
+The client implements protocol-aware task and marker infrastructure. & The client improves neural decoding accuracy. \\
+The online display separates live and final sentence outputs. & The system is a complete clinical speech neuroprosthesis. \\
+Queued marker sending reduces ordering risk in the control path. & Marker timing has been validated to millisecond precision. \\
+Audio and screenshot streams can support later audit. & Auxiliary streams are already synchronized with neural data. \\
+\bottomrule
+\end{tabular}
+\caption{Claim boundary used throughout this progress report.}
+\end{table}
+
+\section{Next Steps and Conclusion}
+The next iteration should convert the implemented mechanisms into measured evidence. The most important tasks are end-to-end marker consistency checks, latency measurements for marker/audio/screenshot channels, usability rehearsal for preview and character-level tasks, documentation cleanup for YAML workflows, and integration tests with server-side recording. These steps would allow future reports to move from implementation evidence to validated acquisition quality.
+
+In summary, the short-term contribution is a more protocol-aware rteeg speech client for neural speech decoding experiments. The work integrates task configurability, stimulus preview, online feedback display, marker queueing, and auxiliary capture in a way that supports controlled future data collection. Its value is infrastructure readiness, and its honest boundary is that decoding performance and synchronization precision still require empirical validation.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
